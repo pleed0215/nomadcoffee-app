@@ -1,19 +1,27 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import {
-  StyleSheet,
-  ImageBackground,
-  Text,
-  useColorScheme,
-  Image,
-  View,
-} from "react-native";
+import "react-native-gesture-handler";
+import { useColorScheme } from "react-native";
+import { AppearanceProvider } from "react-native-appearance";
 import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import { useState } from "react";
-import { BlurView } from "expo-blur";
+
+import { ApolloProvider } from "@apollo/client";
+
+import { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "./src/theme/theme";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AUTH_TOKEN_NAME } from "./src/constants";
+import { makeLogin } from "./src/apollo/client";
+import { apolloClient } from "./src/apollo/client";
+
+import { LoggedOutNav } from "./src/navigation/logged.out";
+import { NavigationContainer } from "@react-navigation/native";
+import { persistor } from "./src/apollo/persistor";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -32,9 +40,14 @@ export default function App() {
     const cacheImages = images.map((image) =>
       Asset.fromModule(image).downloadAsync()
     );
+    const token = await AsyncStorage.getItem(AUTH_TOKEN_NAME);
 
     const cacheFonts = fontsToLoad.map((font) => Font.loadAsync(font));
 
+    await persistor.restore();
+    if (token) {
+      makeLogin(token);
+    }
     await Promise.all<any>([...cacheImages, ...cacheFonts]);
   };
 
@@ -49,39 +62,14 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <ImageBackground
-        style={{ flex: 1, width: "100%" }}
-        source={require("./assets/intro.jpg")}
-      >
-        <BlurView
-          style={{
-            flex: 1,
-            width: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            style={{
-              color: "white",
-              fontFamily: "DoHyeon",
-              fontSize: 24,
-            }}
-          >
-            NOMAD COFFEE
-          </Text>
-        </BlurView>
-      </ImageBackground>
-    </View>
+    <ApolloProvider client={apolloClient}>
+      <ThemeProvider theme={color === "dark" ? darkTheme : lightTheme}>
+        <AppearanceProvider>
+          <NavigationContainer>
+            <LoggedOutNav />
+          </NavigationContainer>
+        </AppearanceProvider>
+      </ThemeProvider>
+    </ApolloProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
