@@ -7,6 +7,7 @@ import { CategoryItem } from "./CategoryItem";
 import { Dimensions, Image, TouchableOpacity } from "react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { LoggedInNavScreenList } from "../navigation/navs";
+import { Carousel } from "./Carousel";
 
 const screen = Dimensions.get("screen");
 
@@ -58,17 +59,14 @@ const UsernameText = styled.Text`
 `;
 
 export const CafeItem: React.FC<CafeItemProps> = ({ shop }) => {
-  const [imageHeight, setImageHeight] = useState(screen.height - 400);
+  const [images, setImages] = useState<string[]>([]);
+
   const navigator = useNavigation<NavigationProp<LoggedInNavScreenList>>();
   useEffect(() => {
-    if (shop.firstPhotoUrl && setImageHeight) {
-      Image.getSize(shop.firstPhotoUrl, (w, h) => {
-        if (w !== 0) {
-          setImageHeight((screen.width * h) / w);
-        }
-      });
+    if (shop.photos) {
+      setImages(shop?.photos?.map((photo) => photo?.url!));
     }
-  }, [shop.firstPhotoUrl, setImageHeight]);
+  }, [shop]);
 
   const onPressShop = () => {
     navigator.navigate("Shop", { id: shop.id, name: shop.name });
@@ -91,10 +89,7 @@ export const CafeItem: React.FC<CafeItemProps> = ({ shop }) => {
         </AvatarContainer>
       </Header>
       <Body>
-        <Image
-          style={{ width: screen.width, height: imageHeight }}
-          source={{ uri: shop.firstPhotoUrl! }}
-        />
+        <Carousel images={images} />
 
         <Categories>
           {shop.categories?.slice(0, 4).map((category, index) => (

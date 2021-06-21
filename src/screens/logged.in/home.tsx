@@ -1,8 +1,6 @@
 import { useQuery } from "@apollo/client";
 import React, { useState } from "react";
-import { View, Text, ListRenderItem } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import { makeLogin, makeLogout } from "../../apollo/client";
+import { FlatList, ListRenderItem } from "react-native";
 import { QUERY_SHOPS } from "../../apollo/queries";
 import { AllShop } from "../../codegen/AllShop";
 import { AllShops, AllShopsVariables } from "../../codegen/AllShops";
@@ -11,11 +9,14 @@ import { ScreenLayout } from "../../components/ScreenLayout";
 import { LoggedInNavScreenParam } from "../../navigation/navs";
 
 export const HomeScreen: React.FC<LoggedInNavScreenParam<"Home">> = () => {
-  const { data, loading, fetchMore } =
+  const { data, loading, fetchMore, refetch } =
     useQuery<AllShops, AllShopsVariables>(QUERY_SHOPS);
   const [refreshing, setRefreshing] = useState(false);
   const onRefreshing = () => {
     setRefreshing(true);
+    refetch({
+      lastId: 0,
+    });
     setRefreshing(false);
   };
 
@@ -39,13 +40,13 @@ export const HomeScreen: React.FC<LoggedInNavScreenParam<"Home">> = () => {
 
   return (
     <ScreenLayout loading={loading}>
-      {data && (
+      {data?.seeCoffeeShops && (
         <FlatList
           refreshing={refreshing}
           onRefresh={onRefreshing}
           onEndReachedThreshold={0.05}
           onEndReached={onEndReached}
-          data={data.seeCoffeeShops}
+          data={data.seeCoffeeShops as AllShop[]}
           keyExtractor={(item: AllShop) => `Cafe:${item.id}`}
           showsVerticalScrollIndicator={false}
           renderItem={renderCafe}

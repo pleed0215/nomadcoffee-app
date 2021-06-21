@@ -9,10 +9,13 @@ import { AllShop } from "../codegen/AllShop";
 // 참고: https://github.com/apollographql/apollo-client/issues/6729
 const seeCoffeeShopsFieldPolicy: FieldPolicy<AllShop[], AllShop[]> = {
   keyArgs: false,
-  merge: (existing, incoming, _: FieldFunctionOptions) => {
-    const safePrev = existing ? existing.slice(0) : [];
-    const result = [...safePrev, ...incoming];
-    return result;
+  merge: (existing, incoming, options: FieldFunctionOptions) => {
+    if (options.args?.hasOwnProperty("lastId") && options.args?.lastId !== 0) {
+      const safePrev = existing ? existing.slice(0) : [];
+      return [...safePrev, ...incoming];
+    } else {
+      return [...incoming];
+    }
   },
 };
 
