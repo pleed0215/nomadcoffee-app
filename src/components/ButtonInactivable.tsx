@@ -33,7 +33,7 @@ const Text = styled.Text`
   color: white;
   font-size: 24px;
   text-align: center;
-  font-family: "LuckiestGuy";
+  font-family: "DoHyeon";
 `;
 
 export const ButtonInactivable: React.FC<ButtonInactivableProp> = ({

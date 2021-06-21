@@ -171,7 +171,7 @@ export const AuthScreen: React.FC<LoggedOutNavScreenParam<"Auth">> = ({
   return (
     <DismissKeyboard>
       <Container
-        behavior={Platform.OS === "ios" ? "padding" : "padding"}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={30}
       >
         <BigTitle>Nomad Coffee</BigTitle>

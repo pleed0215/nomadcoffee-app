@@ -1,10 +1,9 @@
 import React, { useState, useRef } from "react";
-import { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+import { NativeScrollEvent, NativeSyntheticEvent, ScrollView, TouchableWithoutFeedback } from "react-native";
 import { Dimensions } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { ScrollView } from "react-native-gesture-handler";
 import styled, { css } from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useEffect } from "react";
 
 // 참고영상: https://www.youtube.com/watch?v=otr_x0wKgvU
 
@@ -89,30 +88,36 @@ const ActIcon = styled.Text`
 export const Carousel: React.FC<CarouselProps> = ({ images }) => {
   const [index, setIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
+  const length = images.length;
   const onScrollHorizontal = (
     event: NativeSyntheticEvent<NativeScrollEvent>
   ) => {
     const {
       nativeEvent: { contentOffset, layoutMeasurement },
     } = event;
-    const scrolledIndex = Math.ceil(contentOffset.x / layoutMeasurement.width);
-    setIndex(scrolledIndex);
+    const scrolledIndex = Math.ceil(contentOffset.x / layoutMeasurement.width);        
+    const upperLimited = scrolledIndex > length-1 ? length-1 : scrolledIndex;
+    const lowerLimited = upperLimited < 0 ? 0 : upperLimited;    
+    setIndex(lowerLimited);
   };
 
   const scrollTo = (toIndex: number) => {
     if (scrollViewRef) {
-      scrollViewRef.current?.scrollTo({ x: toIndex * imageWidth, y: 0 });
+      // android에서 .. scrollTo하면.. scroll이벤트가 발생하는데.. 
+      // 미세하게.. 설정해 놓은 imageWidth보다 더 커서.. Math.ceil에서 값이 걸림.. 임시방편 트릭..
+      scrollViewRef.current?.scrollTo({ x: toIndex * (imageWidth-1), y: 0});
     }
   };
 
   const onNext = () => {
-    const nextIndex = index === images.length - 1 ? 0 : index + 1;
-    setIndex(index + 1);
+    const nextIndex = index >= images.length - 1 ? 0 : index + 1;
+    
+    setIndex(nextIndex);
     scrollTo(nextIndex);
   };
   const onPrev = () => {
     const prevIndex = index === 0 ? images.length - 1 : index - 1;
-    setIndex(index + 1);
+    setIndex(prevIndex);
     scrollTo(prevIndex);
   };
   const onScrollTo = (toIndex: number) => () => {
@@ -121,6 +126,8 @@ export const Carousel: React.FC<CarouselProps> = ({ images }) => {
       setIndex(toIndex);
     }
   };
+  
+  
 
   return (
     <Container>
@@ -141,7 +148,7 @@ export const Carousel: React.FC<CarouselProps> = ({ images }) => {
         ))}
       </ImageContainer>
       <ActContainer>
-        <ActButton onPress={onPrev}>
+        <ActButton onPressIn={onPrev}>
           <ActIcon>
             <Ionicons
               name="arrow-back-circle"
@@ -150,7 +157,7 @@ export const Carousel: React.FC<CarouselProps> = ({ images }) => {
             />
           </ActIcon>
         </ActButton>
-        <ActButton onPress={onNext}>
+        <ActButton onPressIn={onNext}>
           <ActIcon>
             <Ionicons
               name="arrow-forward-circle"
