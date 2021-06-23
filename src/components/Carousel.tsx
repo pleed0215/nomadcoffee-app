@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { NativeScrollEvent, NativeSyntheticEvent, ScrollView, TouchableWithoutFeedback } from "react-native";
+import { NativeScrollEvent, NativeSyntheticEvent, ScrollView, TouchableWithoutFeedback, Image } from "react-native";
 import { Dimensions } from "react-native";
 import styled, { css } from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -131,7 +131,7 @@ export const Carousel: React.FC<CarouselProps> = ({ images }) => {
 
   return (
     <Container>
-      {/* @ts-ignore */}
+      {/* @ts-ignore typescript ref type에러가 해결 안됨 ㅠㅠ. prettyignore에도 추가. */}
       <ImageContainer ref={scrollViewRef}
         horizontal
         pagingEnabled
