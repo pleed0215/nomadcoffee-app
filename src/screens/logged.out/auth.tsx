@@ -89,6 +89,7 @@ export const AuthScreen: React.FC<LoggedOutNavScreenParam<"Auth">> = ({
 
       if (data.login.ok && data.login.token) {
         makeLogin(data.login.token);
+        navigation.replace("Home");
       } else {
         setError(`로그인 실패: ${data.login.error}`);
       }
