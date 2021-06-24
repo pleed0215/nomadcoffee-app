@@ -4,6 +4,8 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { AllShop } from "../codegen/AllShop";
+import { AllUser } from "../codegen/AllUser";
+import { SearchUsers_searchUsers } from "../codegen/SearchUsers";
 
 // exisiting이 계속 undefined로 되는 이유..?
 // 참고: https://github.com/apollographql/apollo-client/issues/6729
@@ -19,6 +21,24 @@ const seeCoffeeShopsFieldPolicy: FieldPolicy<AllShop[], AllShop[]> = {
   },
 };
 
+const searchUsersFieldPolicy: FieldPolicy<
+  SearchUsers_searchUsers,
+  SearchUsers_searchUsers
+> = {
+  keyArgs: ["term"],
+  merge: (existing, incoming, options: FieldFunctionOptions) => {
+    if (options.args?.hasOwnProperty("lastId") && options.args?.lastId !== 0) {
+      const safePrev = existing ? existing.results?.slice(0) : [];
+      const safeIncoming = incoming ? incoming.results?.slice(0) : [];
+
+      const newResults = [...safePrev!, ...safeIncoming!];
+      return { ...incoming, results: newResults };
+    } else {
+      return { ...incoming };
+    }
+  },
+};
+
 export const apolloCache = new InMemoryCache({
   typePolicies: {
     Category: {
@@ -27,6 +47,7 @@ export const apolloCache = new InMemoryCache({
     Query: {
       fields: {
         seeCoffeeShops: seeCoffeeShopsFieldPolicy,
+        searchUsers: searchUsersFieldPolicy,
       },
     },
   },

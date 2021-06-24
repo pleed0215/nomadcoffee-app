@@ -135,13 +135,13 @@ export const MUTATION_REMOVE_PHOTO_FROM_SHOP = gql`
 `;
 
 export const QUERY_SEE_CATEGORY = gql`
-  query SeeCategory($slug: String!) {
+  query SeeCategory($slug: String!, $lastId: Int) {
     seeCategory(slug: $slug) {
       id
       name
       slug
       totalShops
-      shops {
+      shops(lastId: $lastId) {
         ...AllShop
       }
     }
@@ -193,8 +193,8 @@ export const MUTATION_EDIT_PROFILE = gql`
 `;
 
 export const QUERY_SEARCH_USER = gql`
-  query SearchUsers($term: String!) {
-    searchUsers(term: $term) {
+  query SearchUsers($term: String!, $lastId: Int) {
+    searchUsers(term: $term, lastId: $lastId) {
       total
       results {
         ...AllUser

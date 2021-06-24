@@ -74,6 +74,15 @@ const RenderHomeTitle = () => {
   );
 };
 
+const RenderDownBackIcon: React.FC<{ color: string }> = ({ color }) => (
+  <Ionicons
+    name={Platform.OS === "ios" ? "ios-chevron-down" : "md-chevron-down"}
+    color={color}
+    size={32}
+    style={{ marginLeft: 10 }}
+  />
+);
+
 export const LoggedInStackFactory: React.FC<LoggedInStackFactoryProp> = ({
   screenName,
 }) => {
@@ -152,18 +161,20 @@ export const LoggedInStackFactory: React.FC<LoggedInStackFactoryProp> = ({
           headerTitle: "",
           headerBackTitleVisible: false,
           headerBackImage: () => (
-            <Ionicons
-              name={
-                Platform.OS === "ios" ? "ios-chevron-down" : "md-chevron-down"
-              }
-              color={theme.color.secondary}
-              size={32}
-              style={{ marginLeft: 10 }}
-            />
+            <RenderDownBackIcon color={theme.color.secondary} />
           ),
         }}
       />
-      <StackNav.Screen component={CategoryScreen} name="Category" />
+      <StackNav.Screen
+        component={CategoryScreen}
+        name="Category"
+        options={{
+          headerBackTitleVisible: false,
+          headerBackImage: () => (
+            <RenderDownBackIcon color={theme.color.secondary} />
+          ),
+        }}
+      />
     </StackNav.Navigator>
   );
 };

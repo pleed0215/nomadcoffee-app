@@ -64,4 +64,5 @@ export interface SeeCategory {
 
 export interface SeeCategoryVariables {
   slug: string;
+  lastId?: number | null;
 }

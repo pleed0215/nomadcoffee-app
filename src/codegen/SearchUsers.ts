@@ -53,4 +53,5 @@ export interface SearchUsers {
 
 export interface SearchUsersVariables {
   term: string;
+  lastId?: number | null;
 }

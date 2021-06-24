@@ -3,12 +3,15 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { Dimensions } from "react-native";
 import { View, Text, Image, ScrollView } from "react-native";
+import MapView, { Marker, LatLng } from "react-native-maps";
 
 import styled, { useTheme } from "styled-components/native";
 import { QUERY_SEE_CAFE } from "../../apollo/queries";
 import { SeeCafe, SeeCafeVariables } from "../../codegen/SeeCafe";
 import { ScreenLayout } from "../../components/ScreenLayout";
 import { LoggedInStackScreenParam } from "../../navigation/navs";
+
+const screenWidth = Dimensions.get("screen").width;
 
 const LocationContainer = styled.View`
   width: 100%;
@@ -81,6 +84,7 @@ export const ShopScreen: React.FC<LoggedInStackScreenParam<"Shop">> = ({
         color: theme.color.secondary,
         fontFamily: "DoHyeon",
         fontSize: 24,
+        textAlign: "center",
       },
       headerTransparent: true,
       headerBackground: (_) => (
@@ -140,7 +144,27 @@ export const ShopScreen: React.FC<LoggedInStackScreenParam<"Shop">> = ({
           <Location>주소: {shop?.seeCoffeeShop?.address}</Location>
         </LocationContainer>
         <Map>
-          <Text>지도 들어가야 함</Text>
+          <MapView
+            style={{
+              width: screenWidth,
+              height: 300,
+            }}
+            initialRegion={{
+              latitude: +shop?.seeCoffeeShop?.lat!,
+              longitude: +shop?.seeCoffeeShop?.lng!,
+              latitudeDelta: 0.05,
+              longitudeDelta: 0.05,
+            }}
+          >
+            <Marker
+              coordinate={{
+                latitude: +shop?.seeCoffeeShop?.lat!,
+                longitude: +shop?.seeCoffeeShop?.lng!,
+              }}
+              title={shop?.seeCoffeeShop?.name}
+              description={shop?.seeCoffeeShop?.address!}
+            />
+          </MapView>
         </Map>
       </ScrollView>
     </ScreenLayout>

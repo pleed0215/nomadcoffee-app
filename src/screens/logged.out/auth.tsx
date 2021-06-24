@@ -28,7 +28,7 @@ type FormProp = {
 
 const Container = styled.KeyboardAvoidingView`
   align-items: center;
-
+  background-color: ${(props) => props.theme.background.primary};
   flex: 1;
   width: 100%;
 `;

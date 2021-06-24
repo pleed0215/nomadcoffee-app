@@ -44,7 +44,6 @@ export const ToggleFollows: React.FC<ToggleFollowPros> = ({
   userId,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [following, setFollowing] = useState(isFollowing);
 
   const [toggleFollow] = useMutation<ToggleFollow, ToggleFollowVariables>(
     MUTATION_TOGGLE_FOLLOW
@@ -58,13 +57,13 @@ export const ToggleFollows: React.FC<ToggleFollowPros> = ({
       },
       update: (cache, result) => {
         setLoading(false);
-        setFollowing((prev) => !prev);
+
         if (result.data?.toggleFollow.ok) {
           cache.modify({
             id: `User:${authId}`,
             fields: {
               totalFollowings(prev) {
-                return following ? prev - 1 : prev + 1;
+                return isFollowing ? prev - 1 : prev + 1;
               },
             },
           });
@@ -72,7 +71,7 @@ export const ToggleFollows: React.FC<ToggleFollowPros> = ({
             id: `User:${userId}`,
             fields: {
               totalFollowers(prev) {
-                return following ? prev - 1 : prev + 1;
+                return isFollowing ? prev - 1 : prev + 1;
               },
               isFollowing(prev) {
                 return !prev;
@@ -88,7 +87,7 @@ export const ToggleFollows: React.FC<ToggleFollowPros> = ({
       {loading ? (
         <ActivityIndicator color="white" size="small" />
       ) : (
-        <Text>{following ? "언팔로우" : "팔로우"}</Text>
+        <Text>{isFollowing ? "언팔로우" : "팔로우"}</Text>
       )}
     </SButton>
   );

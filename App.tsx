@@ -10,7 +10,7 @@ import { useState } from "react";
 
 import { ApolloProvider } from "@apollo/client";
 
-import { ThemeProvider } from "styled-components";
+import { ThemeProvider } from "styled-components/native";
 import { darkTheme, lightTheme } from "./src/theme/theme";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,7 +21,6 @@ import { apolloClient } from "./src/apollo/client";
 import { LoggedOutNav } from "./src/navigation/logged.out";
 import { NavigationContainer } from "@react-navigation/native";
 import { persistor } from "./src/apollo/persistor";
-import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -48,6 +47,7 @@ export default function App() {
     if (token) {
       makeLogin(token);
     }
+
     await Promise.all<any>([...cacheImages, ...cacheFonts]);
   };
 
