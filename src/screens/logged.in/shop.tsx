@@ -146,8 +146,8 @@ export const ShopScreen: React.FC<LoggedInStackScreenParam<"Shop">> = ({
         <Map>
           <MapView
             style={{
-              width: screenWidth,
-              height: 300,
+              width: screenWidth - 2,
+              height: 298,
             }}
             initialRegion={{
               latitude: +shop?.seeCoffeeShop?.lat!,
