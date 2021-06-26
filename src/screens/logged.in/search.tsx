@@ -226,6 +226,7 @@ export const SearchScreen: React.FC<LoggedInStackScreenParam<"Search">> = ({
                   usersSearch?.searchUsers.total > 0 && (
                     <ItemBox
                       showsVerticalScrollIndicator={false}
+                      nestedScrollEnabled
                       onScroll={onScrollUserItem}
                       scrollEventThrottle={16}
                     >
