@@ -4,7 +4,7 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { AllShop } from "../codegen/AllShop";
-import { AllUser } from "../codegen/AllUser";
+
 import { SearchUsers_searchUsers } from "../codegen/SearchUsers";
 
 // exisiting이 계속 undefined로 되는 이유..?

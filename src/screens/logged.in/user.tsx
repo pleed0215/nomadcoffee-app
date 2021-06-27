@@ -14,7 +14,8 @@ import { MyShops, MyShopsVariables } from "../../codegen/MyShops";
 import { Dimensions, FlatList, ListRenderItem } from "react-native";
 import { AllShop } from "../../codegen/AllShop";
 
-const width = Dimensions.get("window").width;
+const { width, height } = Dimensions.get("window");
+
 const photoWidth = (width - 30) / 2;
 
 const Container = styled.View`
@@ -78,11 +79,12 @@ const CafeNums = styled.Text`
 
 const CafeContainer = styled.View`
   width: 100%;
+  height: ${height * 0.5}px;
   align-self: center;
   padding-top: 10px;
 `;
 
-const CafeItem = styled.View`
+const CafeItem = styled.TouchableOpacity`
   width: ${photoWidth}px;
   height: ${photoWidth + 30}px;
   border: 1px solid ${(props) => props.theme.color.border};
@@ -109,13 +111,13 @@ const CafeName = styled.Text`
 `;
 
 const RenderCafeItem: ListRenderItem<AllShop> = ({ item }) => (
-  <CafeItem>
+  <CafeItem onPress={() => {}}>
     <CafeFirstPhoto
       width={photoWidth}
       height={photoWidth}
       source={{ uri: item.firstPhotoUrl! }}
     />
-    <CafeNameContainer style={{}}>
+    <CafeNameContainer>
       <CafeName>{item.name}</CafeName>
     </CafeNameContainer>
   </CafeItem>

@@ -87,7 +87,7 @@ const ResultBox = styled.View`
   border-radius: 8px;
   margin-top: 5px;
   margin-bottom: 10px;
-  max-height: 220px;
+  max-height: 200px;
   min-height: 30px;
   padding: 10px;
 `;

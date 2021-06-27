@@ -6,7 +6,7 @@ import styled from "styled-components/native";
 import { PartShop } from "../../codegen/PartShop";
 
 const width = Dimensions.get("window").width;
-const cafeWidth = (width - 2 - 10 - 20 - 20) / 3;
+const cafeWidth = (width - 2 - 10 - 20 - 40) / 3;
 
 type CafeItemProp = {
   shop: PartShop;
@@ -18,6 +18,7 @@ const Container = styled.TouchableOpacity`
   height: ${cafeWidth + 42}px;
   border: 1px solid ${(props) => props.theme.color.border};
   margin-right: 10px;
+  margin-bottom: 10px;
   overflow: hidden;
 `;
 
