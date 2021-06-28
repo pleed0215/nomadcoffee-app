@@ -9,15 +9,9 @@ import {
   createStackNavigator,
   StackScreenProps,
 } from "@react-navigation/stack";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Platform, Text } from "react-native";
 import { useTheme } from "styled-components/native";
-import { HomeScreen } from "../screens/logged.in/home";
-import { ProfileScreen } from "../screens/logged.in/profile";
-import { SearchScreen } from "../screens/logged.in/search";
-import { ShopScreen } from "../screens/logged.in/shop";
-import { UserScreen } from "../screens/logged.in/user";
-import { CategoryScreen } from "../screens/logged.in/category";
-import { AuthScreen } from "../screens/logged.out/auth";
 
 // logged in navs & types.
 export type LoggedInNavScreenList = {
@@ -28,6 +22,7 @@ export type LoggedInNavScreenList = {
   User: { id: number };
   Category: { slug: string };
   Auth: any;
+  Upload: any;
 };
 export type LoggedInNavScreenParam<
   ScreenName extends keyof LoggedInNavScreenList
@@ -53,12 +48,12 @@ export const LoggedOutNavigator =
   createStackNavigator<LoggedOutNavScreenList>();
 
 // stack nav factory
-const StackNav = createStackNavigator<LoggedInNavScreenList>();
-type LoggedInStackFactoryProp = {
+export const StackNav = createStackNavigator<LoggedInNavScreenList>();
+export type LoggedInStackFactoryProp = {
   screenName: keyof LoggedInNavScreenList;
 };
 
-const RenderHomeTitle = () => {
+export const RenderHomeTitle = () => {
   const theme = useTheme();
   return (
     <Text
@@ -74,7 +69,7 @@ const RenderHomeTitle = () => {
   );
 };
 
-const RenderDownBackIcon: React.FC<{ color: string }> = ({ color }) => (
+export const RenderDownBackIcon: React.FC<{ color: string }> = ({ color }) => (
   <Ionicons
     name={Platform.OS === "ios" ? "ios-chevron-down" : "md-chevron-down"}
     color={color}
@@ -83,98 +78,33 @@ const RenderDownBackIcon: React.FC<{ color: string }> = ({ color }) => (
   />
 );
 
-export const LoggedInStackFactory: React.FC<LoggedInStackFactoryProp> = ({
-  screenName,
-}) => {
-  const theme = useTheme();
-
-  const downArrowScreenOptions = {
-    headerStyle: {
-      backgroundColor: theme.background.secondary,
-      shadowColor: "transparent",
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 0,
-    },
-    headerTitle: "",
-    headerBackTitleVisible: false,
-    headerBackImage: () => (
-      <Ionicons
-        name={Platform.OS === "ios" ? "ios-chevron-down" : "md-chevron-down"}
-        color={theme.color.secondary}
-        size={32}
-        style={{ marginLeft: 10 }}
-      />
-    ),
-  };
-
-  return (
-    <StackNav.Navigator mode="modal">
-      {screenName === "Home" && (
-        <StackNav.Screen
-          component={HomeScreen}
-          name="Home"
-          options={{
-            headerTitle: RenderHomeTitle,
-            headerBackTitleVisible: false,
-            headerLeft: () => <></>,
-            headerStyle: { backgroundColor: theme.background.secondary },
-          }}
-        />
-      )}
-      {screenName === "Search" && (
-        <StackNav.Screen component={SearchScreen} name="Search" />
-      )}
-      {screenName === "Profile" && (
-        <StackNav.Screen
-          component={ProfileScreen}
-          name="Profile"
-          options={{
-            headerShown: false,
-          }}
-        />
-      )}
-      {screenName === "Auth" && (
-        <StackNav.Screen
-          component={AuthScreen}
-          name="Auth"
-          initialParams={{ isCreating: false }}
-          options={{
-            headerShown: false,
-          }}
-        />
-      )}
-      <StackNav.Screen
-        component={ShopScreen}
-        name="Shop"
-        options={downArrowScreenOptions}
-      />
-      <StackNav.Screen
-        component={UserScreen}
-        name="User"
-        options={{
-          headerStyle: {
-            backgroundColor: theme.background.secondary,
-            shadowColor: "transparent",
-            shadowOffset: { width: 0, height: 0 },
-            shadowRadius: 0,
-          },
-          headerTitle: "",
-          headerBackTitleVisible: false,
-          headerBackImage: () => (
-            <RenderDownBackIcon color={theme.color.secondary} />
-          ),
-        }}
-      />
-      <StackNav.Screen
-        component={CategoryScreen}
-        name="Category"
-        options={{
-          headerBackTitleVisible: false,
-          headerBackImage: () => (
-            <RenderDownBackIcon color={theme.color.secondary} />
-          ),
-        }}
-      />
-    </StackNav.Navigator>
-  );
+// Upload Nav(Stack nav)
+// Must be logged in.
+// popped up on parent Nav.(LoggedIn)
+// screen1 -> Write cafe names, location, categories
+// screen2 -> Top Tab Nav, select photos or take photos(Can take multi photos).. Upload button on header right.
+export type CafeInfo = {
+  name: string;
+  categories: Array<string>;
+  address: string;
+  lat: number;
+  lng: number;
 };
+export type UploadNavScreenList = {
+  CafeInfo: any;
+  Photo: {
+    info: CafeInfo;
+  };
+};
+export const UploadNavigation = createStackNavigator<UploadNavScreenList>();
+
+export type PhotoNavScreenList = {
+  TakePhoto: {
+    info: CafeInfo;
+  };
+  SelectPhoto: {
+    info: CafeInfo;
+  };
+};
+export const PhotoNavigation =
+  createMaterialTopTabNavigator<PhotoNavScreenList>();

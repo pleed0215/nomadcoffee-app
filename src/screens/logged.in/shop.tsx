@@ -2,8 +2,8 @@ import { useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { Dimensions } from "react-native";
-import { View, Text, Image, ScrollView } from "react-native";
-import MapView, { Marker, LatLng } from "react-native-maps";
+import { View, Image, ScrollView } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 
 import styled, { useTheme } from "styled-components/native";
 import { QUERY_SEE_CAFE } from "../../apollo/queries";
