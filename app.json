@@ -16,9 +16,13 @@
     "userInterfaceStyle": "automatic",
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pleed0215.nomadcoffee",
+      "buildNumber": "1.0.0"
     },
     "android": {
+      "package": "com.pleed0215.nomadcoffee",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
