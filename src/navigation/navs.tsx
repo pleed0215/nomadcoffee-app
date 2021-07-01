@@ -64,7 +64,7 @@ export const RenderHomeTitle = () => {
         color: theme.color.secondary,
       }}
     >
-      NOMAD COFFEE
+      NOMAD COFFEE~!
     </Text>
   );
 };
