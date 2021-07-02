@@ -17,15 +17,15 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "config": {
-        "googleMapsApiKey": "AIzaSyDawbVNIQzSZDM9WC_8fOltll-F5_vkSXo"
+        "googleMapsApiKey": "AIzaSyDkDV7ifejcrp-tb-KaFgPDwpjM8xBH4vA"
       },
       "supportsTablet": true,
       "bundleIdentifier": "com.pleed0215.nomadcoffee",
-      "buildNumber": "1.0.0"      
+      "buildNumber": "1.0.0"
     },
-      
+
     "android": {
-      "package": "com.pleed0215.nomadcoffee",      
+      "package": "com.pleed0215.nomadcoffee",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDawbVNIQzSZDM9WC_8fOltll-F5_vkSXo"
